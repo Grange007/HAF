@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HAF adapts generalist vision-language-action models to humanoid whole-body loco-manipulation through hierarchical action flow and spectral latent reinforcement learning.">
+  <meta name="theme-color" content="#0b0b0a">
+  <meta property="og:title" content="HAF | Humanoid Whole-Body Loco-manipulation">
+  <meta property="og:description" content="Hierarchical Action Flow and Spectral Latent RL for adapting generalist VLAs to humanoids.">
+  <meta property="og:image" content="./static/images/posters/hero.jpg">
+  <title>HAF | Humanoid Adaptation Framework</title>
+  <link rel="icon" href="./figs/icon.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header" data-header>
+    <a class="site-brand" href="#top" aria-label="HAF home">
+      <span class="site-brand-mark">HAF</span>
+      <span class="site-brand-name">Humanoid Adaptation Framework</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="nav-link" href="#overview">Overview</a>
+      <a class="nav-link" href="#method">Method</a>
+      <a class="nav-link" href="#tasks">Tasks</a>
+      <a class="nav-link" href="#results">Results</a>
+      <a class="nav-paper" href="./static/paper/HAF.pdf" target="_blank" rel="noreferrer">
+        Paper <span aria-hidden="true">PDF</span>
+      </a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-overlay" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="hero-kicker">Humanoid Adaptation Framework</p>
+        <h1 id="hero-title">HAF</h1>
+        <p class="hero-subtitle">Adapting Generalist VLAs to Humanoid Whole-Body Loco-manipulation via Hierarchical Action Flow and Spectral Latent RL</p>
+        <div class="hero-authors" aria-label="Paper authors and affiliations">
+          <p class="hero-author-list">
+            Langzhe Gu<sup>1,2*</sup>, Chengkai Hou<sup>1,2*</sup>, Meng Li<sup>2*</sup>, Xinhua Wang<sup>2</sup>, Jiaming Liu<sup>1</sup>, Xinyuan Lv<sup>2,3</sup>, Bowei Zhang<sup>2,3</sup>, Shuanghao Bai<sup>2,4</sup>, Guangrun Li<sup>1,2</sup>, Jingyang He<sup>1,2</sup>, Gaole Dai<sup>1</sup>, Ziluo Ding<sup>2</sup>, Zhiyuan Xu<sup>2</sup>, Kuan Cheng<sup>1</sup>, Jian Tang<sup>2&#9993;</sup>, Zhengping Che<sup>2&#9993;</sup>, Shanghang Zhang<sup>1&#9993;</sup>
+          </p>
+          <div class="hero-affiliations">
+            <span><sup>1</sup> State Key Laboratory of Multimedia Information Processing, School of Computer Science, Peking University</span>
+            <span><sup>2</sup> Beijing Innovation Center of Humanoid Robotics</span>
+            <span><sup>3</sup> Nankai University</span>
+            <span><sup>4</sup> Xi'an Jiaotong University</span>
+          </div>
+          <p class="hero-author-notes">* Equal contribution &nbsp;&nbsp; &#9993; Corresponding authors</p>
+        </div>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#overview">Explore the framework</a>
+          <a class="button button-secondary" href="./static/paper/HAF.pdf" target="_blank" rel="noreferrer">Read the paper</a>
+        </div>
+        <p class="hero-framework"><span>HAF-VLA</span><span aria-hidden="true">+</span><span>HAF-Steer</span></p>
+      </div>
+      <a class="hero-scroll" href="#overview" aria-label="Continue to project overview">
+        <span>Explore the framework</span>
+        <span class="hero-scroll-line" aria-hidden="true"></span>
+      </a>
+    </section>
+
+
+
+    <section class="section section-overview" id="overview">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <p class="section-index">01 / Overview</p>
+          <h2>Adapt Generalist VLA<br>To Humanoids.</h2>
+        </div>
+
+        <div class="abstract-grid reveal">
+          <p class="abstract-label">Abstract</p>
+          <div class="abstract-copy">
+            <p>Humanoid robots hold great promise as general-purpose agents in human-centered environments, yet generalist vision-language-action foundation models are not readily applicable to humanoid whole-body loco-manipulation. High-dimensional and interdependent whole-body motion makes it difficult for conventional single-stage architectures to coordinate locomotion, waist posture, and dual-arm manipulation, while policies trained purely through offline behavior cloning can remain suboptimal during real-world deployment.</p>
+            <p>HAF, the Humanoid Adaptation Framework, combines two complementary components. HAF-VLA splits full-body action denoising into three sequential stages and preserves kinematic dependencies with stage embeddings and cross-stage KV caches. On top of the frozen generator, HAF-Steer uses flow reversal and DCT compression to train a regularized SAC policy in a compact noise subspace, enabling efficient offline-to-online refinement without updating the large VLA backbone.</p>
+          </div>
+        </div>
+
+        <figure class="paper-figure overview-figure reveal">
+          <a href="./static/images/paper/haf-overview.png" target="_blank" rel="noreferrer" aria-label="Open the complete HAF overview figure">
+            <img src="./static/images/paper/haf-overview.png" alt="Overview of HAF real-world experiments, HAF-VLA, HAF-Steer, and their performance" loading="lazy">
+          </a>
+          <figcaption><strong>Figure 1.</strong> HAF couples hierarchical whole-body generation with spectral latent policy adaptation.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-method" id="method">
+      <div class="section-shell">
+        <div class="section-heading method-heading reveal">
+          <p class="section-index">02 / Method</p>
+          <h2>Two Components:<br>HAF-VLA &<br>HAF-Steer</h2>
+        </div>
+
+        <article class="method-block method-vla" id="haf-vla">
+          <div class="method-intro reveal">
+            <div>
+              <p class="method-tag method-tag-green">Part A</p>
+              <h3>HAF-VLA</h3>
+              <p class="method-name">Hierarchical Action Flow</p>
+            </div>
+            <p class="method-summary">A shared action expert progressively expands the active whole-body action space. Clean actions from earlier stages are encoded as KV caches, conditioning later stages before a single final action chunk is deployed.</p>
+          </div>
+
+          <div class="stage-sequence reveal" aria-label="HAF-VLA generation stages">
+            <div class="stage-step">
+              <span class="stage-number">01</span>
+              <h4>Locomotion + Head</h4>
+            </div>
+            <div class="stage-connector" aria-hidden="true"></div>
+            <div class="stage-step">
+              <span class="stage-number">02</span>
+              <h4>+ Waist</h4>
+            </div>
+            <div class="stage-connector" aria-hidden="true"></div>
+            <div class="stage-step">
+              <span class="stage-number">03</span>
+              <h4>+ Manipulation</h4>
+            </div>
+          </div>
+
+          <figure class="paper-figure method-figure reveal">
+            <a href="./static/images/paper/haf-vla.png" target="_blank" rel="noreferrer" aria-label="Open the HAF-VLA architecture figure">
+              <img src="./static/images/paper/haf-vla.png" alt="HAF-VLA architecture with three hierarchical action generation stages" loading="lazy">
+            </a>
+            <figcaption><strong>HAF-VLA.</strong> Cumulative action masks and cross-stage clean-action KV caches preserve the dependency from base stabilization to fine manipulation.</figcaption>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-steer" id="haf-steer">
+      <div class="section-shell">
+        <article class="method-block">
+          <div class="method-intro reveal">
+            <div>
+              <p class="method-tag method-tag-blue">Part B</p>
+              <h3>HAF-Steer</h3>
+              <p class="method-name">Spectral Latent RL</p>
+            </div>
+            <p class="method-summary">Expert action chunks are reversed through the frozen flow field, compressed to low-frequency DCT coefficients, and used to initialize a regularized offline-to-online SAC policy.</p>
+          </div>
+
+          <figure class="paper-figure method-figure reveal">
+            <a href="./static/images/paper/haf-steer.png" target="_blank" rel="noreferrer" aria-label="Open the HAF-Steer architecture figure">
+              <img src="./static/images/paper/haf-steer.png" alt="HAF-Steer flow reversal, DCT compression, reinforcement learning, and reconstruction pipeline" loading="lazy">
+            </a>
+            <figcaption><strong>HAF-Steer.</strong> Flow reversal constructs expert spectral targets; mixed offline-online learning adjusts the low-frequency noise modes while the flow generator remains fixed.</figcaption>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-tasks" id="tasks">
+      <div class="section-shell section-shell-wide">
+        <div class="section-heading reveal">
+          <p class="section-index">03 / Real-world tasks</p>
+          <h2>Seven tasks.<br>Whole-body coordination throughout.</h2>
+          <p class="section-lede">Each task combines navigation, posture adjustment, and physical interaction. All task clips below intentionally play without sound.</p>
+        </div>
+
+        <div class="task-grid">
+          <article class="task-card reveal">
+            <header class="task-header">
+              <span class="task-number">01</span>
+              <div><h3>Laundry Loading</h3><p>Carry + bimanual loading</p></div>
+            </header>
+            <div class="task-media">
+              <video class="task-video" muted loop playsinline preload="none" poster="./static/images/posters/laundry_loading.jpg" aria-label="Laundry Loading task video">
+                <source src="./static/videos/web/laundry_loading.mp4" type="video/mp4">
+              </video>
+              <span class="silent-badge">Silent</span>
+              <button class="video-toggle is-playing" type="button" aria-label="Pause Laundry Loading video" title="Pause video">
+                <span class="video-icon video-icon-pause" aria-hidden="true">II</span>
+                <span class="video-icon video-icon-play" aria-hidden="true">Play</span>
+              </button>
+            </div>
+          </article>
+
+          <article class="task-card reveal">
+            <header class="task-header">
+              <span class="task-number">02</span>
+              <div><h3>Clothes Retrieval</h3><p>Navigate + retrieve</p></div>
+            </header>
+            <div class="task-media">
+              <video class="task-video" muted loop playsinline preload="none" poster="./static/images/posters/clothes_retrival.jpg" aria-label="Clothes Retrieval task video">
+                <source src="./static/videos/web/clothes_retrival.mp4" type="video/mp4">
+              </video>
+              <span class="silent-badge">Silent</span>
+              <button class="video-toggle is-playing" type="button" aria-label="Pause Clothes Retrieval video" title="Pause video"><span class="video-icon video-icon-pause" aria-hidden="true">II</span><span class="video-icon video-icon-play" aria-hidden="true">Play</span></button>
+            </div>
+          </article>
+
+          <article class="task-card reveal">
+            <header class="task-header">
+              <span class="task-number">03</span>
+              <div><h3>Table Tidy</h3><p>Reach + rearrange</p></div>
+            </header>
+            <div class="task-media">
+              <video class="task-video" muted loop playsinline preload="none" poster="./static/images/posters/table_tidy.jpg" aria-label="Table Tidy task video">
+                <source src="./static/videos/web/table_tidy.mp4" type="video/mp4">
+              </video>
+              <span class="silent-badge">Silent</span>
+              <button class="video-toggle is-playing" type="button" aria-label="Pause Table Tidy video" title="Pause video"><span class="video-icon video-icon-pause" aria-hidden="true">II</span><span class="video-icon video-icon-play" aria-hidden="true">Play</span></button>
+            </div>
+          </article>
+
+          <article class="task-card reveal">
+            <header class="task-header">
+              <span class="task-number">04</span>
+              <div><h3>Basket Transfer</h3><p>Lift + transport</p></div>
+            </header>
+            <div class="task-media">
+              <video class="task-video" muted loop playsinline preload="none" poster="./static/images/posters/basket_transfer.jpg" aria-label="Basket Transfer task video">
+                <source src="./static/videos/web/basket_transfer.mp4" type="video/mp4">
+              </video>
+              <span class="silent-badge">Silent</span>
+              <button class="video-toggle is-playing" type="button" aria-label="Pause Basket Transfer video" title="Pause video"><span class="video-icon video-icon-pause" aria-hidden="true">II</span><span class="video-icon video-icon-play" aria-hidden="true">Play</span></button>
+            </div>
+          </article>
+
+          <article class="task-card reveal">
+            <header class="task-header">
+              <span class="task-number">05</span>
+              <div><h3>Toy Storage</h3><p>Pick + relocate</p></div>
+            </header>
+            <div class="task-media">
+              <video class="task-video" muted loop playsinline preload="none" poster="./static/images/posters/toy_storage.jpg" aria-label="Toy Storage task video">
+                <source src="./static/videos/web/toy_storage.mp4" type="video/mp4">
+              </video>
+              <span class="silent-badge">Silent</span>
+              <button class="video-toggle is-playing" type="button" aria-label="Pause Toy Storage video" title="Pause video"><span class="video-icon video-icon-pause" aria-hidden="true">II</span><span class="video-icon video-icon-play" aria-hidden="true">Play</span></button>
+            </div>
+          </article>
+
+          <article class="task-card reveal">
+            <header class="task-header">
+              <span class="task-number">06</span>
+              <div><h3>Ball Tossing</h3><p>Align + throw</p></div>
+            </header>
+            <div class="task-media">
+              <video class="task-video" muted loop playsinline preload="none" poster="./static/images/posters/ball_tossing.jpg" aria-label="Ball Tossing task video">
+                <source src="./static/videos/web/ball_tossing.mp4" type="video/mp4">
+              </video>
+              <span class="silent-badge">Silent</span>
+              <button class="video-toggle is-playing" type="button" aria-label="Pause Ball Tossing video" title="Pause video"><span class="video-icon video-icon-pause" aria-hidden="true">II</span><span class="video-icon video-icon-play" aria-hidden="true">Play</span></button>
+            </div>
+          </article>
+
+          <article class="task-card task-card-last reveal">
+            <header class="task-header">
+              <span class="task-number">07</span>
+              <div><h3>Box Transfer</h3><p>Squat + whole-body carry</p></div>
+            </header>
+            <div class="task-media">
+              <video class="task-video" muted loop playsinline preload="none" poster="./static/images/posters/box_transfer.jpg" aria-label="Box Transfer task video">
+                <source src="./static/videos/web/box_transfer.mp4" type="video/mp4">
+              </video>
+              <span class="silent-badge">Silent</span>
+              <button class="video-toggle is-playing" type="button" aria-label="Pause Box Transfer video" title="Pause video"><span class="video-icon video-icon-pause" aria-hidden="true">II</span><span class="video-icon video-icon-play" aria-hidden="true">Play</span></button>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section section-results" id="results">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <p class="section-index">04 / Experiments</p>
+          <h2>Clear gains in both VLA & RL adaptation.</h2>
+        </div>
+
+        <div class="results-table-wrap reveal">
+          <div class="evidence-copy">
+            <p class="method-tag method-tag-blue">HAF-VLA Performance</p>
+            <h3>HAF-VLA enable long-horizon humanoid loco–manipulation beyond existing SOTA methods</h3>
+          </div>
+          <table class="results-table">
+            <caption>Main results on seven long-horizon humanoid loco-manipulation tasks</caption>
+            <thead>
+              <tr><th scope="col">Task</th><th scope="col" class="ours">HAF-VLA</th><th scope="col">pi0.5</th><th scope="col">GR00T N1.7</th><th scope="col">Cosmos</th><th scope="col">ACT</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Laundry Loading</th><td class="ours">66.7</td><td>53.3</td><td>40.0</td><td>0.0</td><td>10.0</td></tr>
+              <tr><th scope="row">Clothes Retrieval</th><td class="ours">53.3</td><td>53.3</td><td>33.3</td><td>26.7</td><td>23.3</td></tr>
+              <tr><th scope="row">Table Tidy</th><td class="ours">80.0</td><td>70.0</td><td>40.0</td><td>16.7</td><td>23.3</td></tr>
+              <tr><th scope="row">Basket Transfer</th><td class="ours">63.3</td><td>50.0</td><td>43.3</td><td>33.3</td><td>16.7</td></tr>
+              <tr><th scope="row">Toy Storage</th><td class="ours">80.0</td><td>53.3</td><td>30.0</td><td>40.0</td><td>23.3</td></tr>
+              <tr><th scope="row">Ball Tossing</th><td class="ours">56.7</td><td>33.3</td><td>36.7</td><td>3.3</td><td>30.0</td></tr>
+              <tr><th scope="row">Box Transfer</th><td class="ours">93.3</td><td>60.0</td><td>43.3</td><td>73.3</td><td>50.0</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><th scope="row">Average</th><td class="ours">70.5</td><td>53.3</td><td>38.1</td><td>27.6</td><td>25.2</td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="evidence-block reveal">
+          <div class="evidence-copy">
+            <p class="method-tag method-tag-orange">OOD robustness</p>
+            <h3>HAF-VLA generalize to unseen visual and positional disturbances</h3>
+            <p>With an unseen chair near the Laundry Loading path, HAF-VLA scores 40.0% versus 26.7% for pi0.5. With a 20 cm backward start shift in Clothes Retrieval, it scores 43.3% versus 36.7%.</p>
+          </div>
+          <figure class="paper-figure evidence-figure">
+            <a href="./static/images/paper/generalization.png" target="_blank" rel="noreferrer" aria-label="Open the generalization experiments figure">
+              <img src="./static/images/paper/generalization.png" alt="Object distraction and position disturbance generalization experiments" loading="lazy">
+            </a>
+            <figcaption>Controlled visual and positional disturbances used for the HAF-VLA generalization study.</figcaption>
+          </figure>
+        </div>
+
+        <div class="steer-results reveal">
+          <div class="evidence-copy">
+            <p class="method-tag method-tag-blue">Offline to online</p>
+            <h3>HAF-Steer improve real-world deployment performance through offline-to-online adaptation.</h3>
+            <p>Across Toy Storage and Basket Transfer with both pi0.5 and HAF-VLA backbones, offline noise behavior cloning provides a strong initialization and offline-to-online SAC delivers further adaptation.</p>
+          </div>
+          <figure class="paper-figure">
+            <a href="./static/images/paper/haf-steer-results.png" target="_blank" rel="noreferrer" aria-label="Open the HAF-Steer results figure">
+              <img src="./static/images/paper/haf-steer-results.png" alt="HAF-Steer success rates on Toy Storage and Basket Transfer in in-distribution and out-of-distribution settings" loading="lazy">
+            </a>
+            <figcaption>Successful trials out of 10. DSRL training was terminated in unsafe exploration settings, as noted in the paper.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <strong>HAF</strong>
+      <span>Hierarchical Action Flow for humanoid whole-body loco-manipulation.</span>
+    </div>
+    <a href="#top">Back to top</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
