@@ -175,13 +175,22 @@ video:focus-visible {
   border-radius: 4px;
 }
 
-.nav-paper span {
-  padding: 2px 5px;
-  border-radius: 2px;
-  background: var(--coral);
-  color: var(--ink);
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  font-size: 9px;
+.nav-paper .icon,
+.button-secondary .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.nav-paper .ai-arxiv {
+  color: var(--coral);
+  font-size: 1.3em;
+}
+
+.button-secondary .ai-arxiv {
+  color: currentColor;
+  font-size: 1.2em;
 }
 
 .hero {
@@ -261,6 +270,18 @@ video:focus-visible {
   line-height: 1.65;
 }
 
+.hero-author-list .author-link {
+  color: inherit;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.hero-author-list .author-link:hover {
+  color: var(--yellow);
+  text-decoration-color: currentColor;
+}
+
 .hero-author-list sup,
 .hero-affiliations sup {
   color: var(--yellow);
@@ -317,6 +338,7 @@ video:focus-visible {
 }
 
 .button-secondary {
+  gap: 8px;
   border-color: rgba(255, 255, 255, 0.62);
   background: rgba(8, 8, 7, 0.42);
   color: var(--white);
