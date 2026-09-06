@@ -307,6 +307,22 @@ video:focus-visible {
   font-size: 9px;
 }
 
+.hero-acceptance {
+  display: inline-block;
+  margin: 16px 0 0;
+  padding: 7px 10px;
+  border-left: 3px solid var(--green);
+  background: rgba(8, 8, 7, 0.56);
+  color: var(--white);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hero-acceptance strong {
+  color: var(--green);
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
